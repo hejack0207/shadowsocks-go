@@ -20,11 +20,10 @@ shadowsocks-go is golang implementation of shadowsocks(aka an socks proxy utils)
 %build
 
 %install
-cp -f shadowsocks-go/sample-config/client-multi-server.json ${RPM_BUILD_ROOT}/etc/shadowsocks-go/config.json
-mkdir -p "$pkgdir/usr/bin"
-install -p -m755 "$srcdir/bin/shadowsocks-server" "$pkgdir/usr/bin/"
-mkdir -p "$pkgdir/usr/lib/systemd/system"
-cat > "$pkgdir/usr/lib/systemd/system/shadowsocks-go-server@.service" <<EOF
+mkdir -p "%{buildroot}/usr/bin"
+install -p -m755 "bin/shadowsocks-server" "%{buildroot}/usr/bin/"
+mkdir -p "%{buildroot}/usr/lib/systemd/system"
+cat > "%{buildroot}/usr/lib/systemd/system/shadowsocks-go-server@.service" <<EOF
 [Unit]
 Description=Shadowsocks Server Service (Go Version)
 After=network.target
@@ -38,11 +37,12 @@ ExecStart=/usr/bin/shadowsocks-server -c /etc/shadowsocks/%i.json
 [Install]
 WantedBy=multi-user.target
 EOF
+cp -f shadowsocks-go/sample-config/client-multi-server.json %{buildroot}/etc/shadowsocks-go/config.json
 
-mkdir -p "$pkgdir/usr/bin"
-install -p -m755 "$srcdir/bin/shadowsocks-local" "$pkgdir/usr/bin/"
-mkdir -p "$pkgdir/usr/lib/systemd/system"
-cat > "$pkgdir/usr/lib/systemd/system/shadowsocks-go@.service" <<EOF
+mkdir -p "%{buildroot}/usr/bin"
+install -p -m755 "$srcdir/bin/shadowsocks-local" "%{buildroot}/usr/bin/"
+mkdir -p "%{buildroot}/usr/lib/systemd/system"
+cat > "%{buildroot}/usr/lib/systemd/system/shadowsocks-go@.service" <<EOF
 [Unit]
 Description=Shadowsocks Client Service (Go Version)
 After=network.target
@@ -57,8 +57,6 @@ ExecStart=/usr/bin/shadowsocks-local -c /etc/shadowsocks/%i.json
 WantedBy=multi-user.target
 EOF
 
-%makeinstall
-
 %clean
 #rm -fr %{buildroot}
 
@@ -69,9 +67,7 @@ EOF
 %files
 %defattr(-, root, root)
 
-%doc AUTHORS ChangeLog NEWS README Copyright TODO doc/xmlstarlet.txt doc/xmlstarlet.pdf
-%doc %{_mandir}/man1/xmlstarlet.1*
+%doc AUTHORS ChangeLog NEWS README Copyright TODO
 
-%{prefix}/bin/xml
 %changelog
 
