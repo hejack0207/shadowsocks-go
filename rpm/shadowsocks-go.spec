@@ -19,15 +19,50 @@ shadowsocks-go is golang implementation of shadowsocks(aka an socks proxy utils)
 
 %build
 %configure
-make
+#make
 
 %install
-rm -fr %{buildroot}
+cp -f /home/he/dev/Go/hejack0207/shadowsocks-go/sample-config/client-multi-server.json ${RPM_BUILD_ROOT}/etc/shadowsocks-go/config.json
+mkdir -p "$pkgdir/usr/bin"
+install -p -m755 "$srcdir/bin/shadowsocks-server" "$pkgdir/usr/bin/"
+mkdir -p "$pkgdir/usr/lib/systemd/system"
+cat > "$pkgdir/usr/lib/systemd/system/shadowsocks-go-server@.service" <<EOF
+[Unit]
+Description=Shadowsocks Server Service (Go Version)
+After=network.target
+
+[Service]
+Type=simple
+#User=nobody
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+ExecStart=/usr/bin/shadowsocks-server -c /etc/shadowsocks/%i.json
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+mkdir -p "$pkgdir/usr/bin"
+install -p -m755 "$srcdir/bin/shadowsocks-local" "$pkgdir/usr/bin/"
+mkdir -p "$pkgdir/usr/lib/systemd/system"
+cat > "$pkgdir/usr/lib/systemd/system/shadowsocks-go@.service" <<EOF
+[Unit]
+Description=Shadowsocks Client Service (Go Version)
+After=network.target
+
+[Service]
+Type=simple
+#User=nobody
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+ExecStart=/usr/bin/shadowsocks-local -c /etc/shadowsocks/%i.json
+
+[Install]
+WantedBy=multi-user.target
+EOF
 
 %makeinstall
 
 %clean
-rm -fr %{buildroot}
+#rm -fr %{buildroot}
 
 %post
 
