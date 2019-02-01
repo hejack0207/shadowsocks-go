@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-go",
-  "version": "!version!",
+  "version": "1.2.2",
   "arch": "!arch!",
   "release": "1",
   "summary": "Shadowsocks Golang Implementation",
@@ -8,10 +8,9 @@
   "license": "MIT",
   "url": "http://shadowsocks.github.io/shadowsocks-go",
   "description": "shadowsocks-go is golang implementation of shadowsocks(aka an socks proxy utils).",
-  "changelog-cmd": "changelog rpm",
   "files": [
     {
-      "from": "build/!arch!/hello",
+      "from": "build/!arch!/shadowsocks-server",
       "to": "%{_bindir}/",
       "base": "build/!arch!/",
       "type": ""
@@ -23,13 +22,7 @@
       "type": ""
     },
     {
-      "from": "assets/**/**",
-      "to": "%{_datarootdir}/!name!/other",
-      "base": "assets",
-      "type": ""
-    },
-    {
-      "from": "rpm/shadowsocks-server.service",
+      "from": "shadowsocks-server.service",
       "to": "%{_unitdir}/",
       "base": "rpm"
     }
@@ -40,17 +33,5 @@
   "postrm": "rpm/postrm.sh",
   "verify": "rpm/verify.sh",
   "envs": {
-  },
-  "menus": [
-    {
-      "name":"shadowsocks-go-shortcut",
-      "generic-name":"shadowsocks-go",
-      "exec":"xdg-open http://localhost:8080/",
-      "icon":"ico.png",
-      "type":"Application",
-      "keywords":"shadowsocks",
-      "startup-notify": false,
-      "categories":"Utility"
-    }
-  ]
+  }
 }
