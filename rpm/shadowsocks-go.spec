@@ -20,7 +20,7 @@ shadowsocks-go is golang implementation of shadowsocks(aka an socks proxy utils)
 %build
 
 %install
-cp -f /home/he/dev/Go/hejack0207/shadowsocks-go/sample-config/client-multi-server.json ${RPM_BUILD_ROOT}/etc/shadowsocks-go/config.json
+cp -f shadowsocks-go/sample-config/client-multi-server.json ${RPM_BUILD_ROOT}/etc/shadowsocks-go/config.json
 mkdir -p "$pkgdir/usr/bin"
 install -p -m755 "$srcdir/bin/shadowsocks-server" "$pkgdir/usr/bin/"
 mkdir -p "$pkgdir/usr/lib/systemd/system"
